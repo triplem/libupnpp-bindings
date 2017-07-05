@@ -7,7 +7,6 @@ AC_CONFIG_SRCDIR([upcppy.i])
 
 LT_PREREQ([2.2.6])
 LT_INIT([disable-static])
-
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_PROG_CXX
