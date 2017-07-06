@@ -1,4 +1,4 @@
-%module upcppy
+%module upnpp
 
 %{
 /* upcppy.i: libupnpp swig interface
@@ -109,4 +109,5 @@ namespace std {
 
 %newobject findTypedService;
 %include "typedservice.hxx"
+
 

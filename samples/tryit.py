@@ -4,8 +4,7 @@ from __future__ import print_function
 
 import sys
 import time
-
-import upcppy
+import upnpp
 
 def debug(x):
    print("%s" % x, file = sys.stderr)
@@ -24,37 +23,44 @@ def runaction(srv, action, args, retdata):
    
 
 
-srv = upcppy.findTypedService("UpMpd-bureau", "avtransport", True)
+srv = upnpp.findTypedService("UpMpd-bureau", "avtransport", True)
 
 if not srv:
    debug("findTypedService failed")
    sys.exit(1)
    
-args = upcppy.VectorString()
-retdata = upcppy.MapStringString()
+args = upnpp.VectorString()
+retdata = upnpp.MapStringString()
 
 args = ["0", "http://192.168.4.4:9790/minimserver/*/mp3/variete/billy_joel/the_stranger/01*20-*20Movin*27*20Out*20(Anthony*27s*20Song).mp3", ""]
-runaction(srv, "SetAVTransportURI", args, retdata)
+# runaction(srv, "SetAVTransportURI", args, retdata)
 
 # Instanceid speed
 args = ["0", "1"]
-runaction(srv, "Play", args, retdata)
+# runaction(srv, "Play", args, retdata)
 
-for i in range(0,3):
-   # InstanceId, Unit, target
-   args = ["0", "REL_TIME", "0:0:30"]
-   runaction(srv, "Seek", args, retdata)
-   args = ["0"]
-   runaction(srv, "GetMediaInfo", args, retdata)
-   time.sleep(2)
+def seekloop():
+   for i in range(0,3):
+      # InstanceId, Unit, target
+      args = ["0", "REL_TIME", "0:0:30"]
+      runaction(srv, "Seek", args, retdata)
+      args = ["0"]
+      runaction(srv, "GetMediaInfo", args, retdata)
+      time.sleep(2)
+
+#args = ["0", "REL_TIME", "0:20:30"]
+#runaction(srv, "Seek", args, retdata)
 
 args = ["0"]
-runaction(srv, "Stop", args, retdata)
+runaction(srv, "GetPositionInfo", args, retdata)
+
+args = ["0"]
+# runaction(srv, "Stop", args, retdata)
 
 sys.exit(0)
 
 # Get in touch with discovery service
-dir = upcppy.UPnPDeviceDirectory_getTheDir()
+dir = upnpp.UPnPDeviceDirectory_getTheDir()
 
 # Retrieve device description for designated friendly name
 #
@@ -64,7 +70,7 @@ dir = upcppy.UPnPDeviceDirectory_getTheDir()
 # original object because locking etc.). This avoid allocating a copy
 # inside getDev...(), and deciding who is responsible for the memory.
 fname = "UpMpd-bureau"
-description = upcppy.UPnPDeviceDesc()
+description = upnpp.UPnPDeviceDesc()
 if not dir.getDevByFName(fname, description):
    debug("%s not found" % fname)
    sys.exit(1)
@@ -77,7 +83,7 @@ if not dir.getDevByFName(fname, description):
 # methods. Another approach would be to have static methods in the
 # C++, just taking an UDN or friendlyname, and returning an object.
 # rdr = RenderingControlFindAllocate(friendlyname)
-rdrc = upcppy.RenderingControl()
+rdrc = upnpp.RenderingControl()
 status = rdrc.initFromDescription(description)
 if status:
    vol = rdrc.getVolume()
@@ -86,11 +92,11 @@ else:
    debug("RenderingControl service not found")
    sys.exit(1)
 
-avt = upcppy.AVTransport()
+avt = upnpp.AVTransport()
 status = avt.initFromDescription(description)
 
 if status:
-   posinf = upcppy.AVTPositionInfo()
-   status = upcppy.AVTGetPositionInfo(avt, posinf)
+   posinf = upnpp.AVTPositionInfo()
+   status = upnpp.AVTGetPositionInfo(avt, posinf)
    print("PositionInfo: trackuri: %s" % posinf.trackuri)
    
