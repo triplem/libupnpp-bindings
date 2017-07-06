@@ -5,7 +5,7 @@ AM_CPPFLAGS = -DDEBUG -g -Wall -I$(AX_SWIG_PYTHON_CPPFLAGS)
 AM_CXXFLAGS = -std=c++11 $(AX_SWIG_PYTHON_CPPFLAGS)
 
 SWIG_sources = $(top_srcdir)/upnpp.i
-SWIG_includes = -I$(top_srcdir)  -I/usr/include/libupnpp/control/
+SWIG_includes = -I$(top_srcdir) -I/usr/include
 
 BUILT_SOURCES = upnpp_wrap.cxx upnpp.py
 

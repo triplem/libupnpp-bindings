@@ -57,7 +57,6 @@ runaction(srv, "GetPositionInfo", args, retdata)
 args = ["0"]
 # runaction(srv, "Stop", args, retdata)
 
-sys.exit(0)
 
 # Get in touch with discovery service
 dir = upnpp.UPnPDeviceDirectory_getTheDir()
@@ -87,7 +86,7 @@ rdrc = upnpp.RenderingControl()
 status = rdrc.initFromDescription(description)
 if status:
    vol = rdrc.getVolume()
-   print("GOT rendering control service! Volume is %d" % vol)
+   print("\nGOT rendering control service! Volume is %d" % vol)
 else:
    debug("RenderingControl service not found")
    sys.exit(1)
@@ -98,5 +97,5 @@ status = avt.initFromDescription(description)
 if status:
    posinf = upnpp.AVTPositionInfo()
    status = upnpp.AVTGetPositionInfo(avt, posinf)
-   print("PositionInfo: trackuri: %s" % posinf.trackuri)
+   print("\nAVTRansport ok: PositionInfo: trackuri: %s" % posinf.trackuri)
    

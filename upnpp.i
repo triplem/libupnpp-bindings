@@ -19,56 +19,70 @@
  *   Free Software Foundation, Inc.,
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <iostream>
-#include <libupnpp/control/description.hxx>
-#include <libupnpp/control/discovery.hxx>
-#include <libupnpp/control/cdircontent.hxx>
-#include <libupnpp/control/avtransport.hxx>
-#include <libupnpp/control/renderingcontrol.hxx>
 %}
-
 
 %include stl.i
-%include typemaps.i
 
-%include "description.hxx"
-%include "discovery.hxx"
-%include "cdircontent.hxx"
-%include "service.hxx"
-%include "renderingcontrol.hxx"
-
-/* Helper for finding a service description specified by service type inside a
- * device description, then used to call the service constructor.
- * C++ code would use the device directory traverse()
- * method to do this, but I'm not too sure how to do it from Python. 
- * sobj is typically an empty object (default constructor) just used to call
- * the appropriate virtual method, which avoids having to use templates.
- * Usage was:
- *   rdrdesc = upcppy.findServiceDesc(emptyrdr, desc)
- *   if rdrdesc:
- *       rdrc = upcppy.RenderingControl(desc, rdrdesc)
- *
- * This has been replaced by the initFromDescription() call on an empty object
+/**************************************
+ * Wrapper for the TypedService class, which has a string-based interface
+ * and was actually created for ease of use from swig.
+ * cdircontent is needed because of the VarEventReporter method which takes
+ * an UPnPDirObject value argument.
  */
 %{
-UPnPClient::UPnPServiceDesc *
-findServiceDesc(UPnPClient::Service *sobj, UPnPClient::UPnPDeviceDesc *dev)
-{
-    for (auto& serv : dev->services) {
-        if (sobj->serviceTypeMatch(serv.serviceType)) {
-           return &serv;
-        }
-    }
-    return 0;
-}
+#include <libupnpp/control/description.hxx>
+#include <libupnpp/control/cdircontent.hxx>
+#include <libupnpp/control/typedservice.hxx>
 %}
 
-UPnPClient::UPnPServiceDesc *findServiceDesc(UPnPClient::Service *,
-                                             UPnPClient::UPnPDeviceDesc *);
+namespace std {
+%template(VectorString)  vector<string>;
+%template(MapStringString) map<string,string>;
+}   
+
+%include <libupnpp/control/cdircontent.hxx>
+%include <libupnpp/control/service.hxx>
+%newobject findTypedService;
+%include <libupnpp/control/typedservice.hxx>
 
 
-%include "avtransport.hxx"
 
+/***************************************
+ * Incomplete wrappers for avtransport and renderingcontrol. Not very
+ * useful, code kept around for reference.
+ * Because there is no factory function, these need to deal explicitely
+ * with discovery and description.
+ */
+%{
+#include <libupnpp/control/discovery.hxx>
+%}
+
+%warnfilter(325) UPnPClient::UPnPServiceDesc::Argument;
+%warnfilter(325) UPnPClient::UPnPServiceDesc::Action;
+%warnfilter(325) UPnPClient::UPnPServiceDesc::StateVariable;
+%warnfilter(325) UPnPClient::UPnPServiceDesc::Parsed;
+
+%include <libupnpp/control/description.hxx>
+%include <libupnpp/control/discovery.hxx>
+
+%{
+#include <libupnpp/control/renderingcontrol.hxx>
+%}
+%include <libupnpp/control/renderingcontrol.hxx>
+
+%{
+#include <libupnpp/control/avtransport.hxx>
+%}
+%warnfilter(325) UPnPClient::AVTransport::MediaInfo;
+%warnfilter(325) UPnPClient::AVTransport::TransportInfo;
+%warnfilter(325) UPnPClient::AVTransport::PositionInfo;
+%warnfilter(325) UPnPClient::AVTransport::DeviceCapabilities;
+%warnfilter(325) UPnPClient::AVTransport::TransportSettings;
+%include <libupnpp/control/avtransport.hxx>
+
+/* Manage the nested PositionInfo class by defining another top level class
+   and using a helper function. No need for the new class to be identical
+   to the old one, as opposed to what would happen with typedefs */
 %inline %{
 struct AVTPositionInfo {
     int track;
@@ -96,18 +110,3 @@ int AVTGetPositionInfo(UPnPClient::AVTransport *tp, AVTPositionInfo *inf)
     return ret;
 }
 %}
-
-
-namespace std {
-%template(VectorString)  vector<string>;
-%template(MapStringString) map<string,string>;
-}   
-
-%{
-#include <libupnpp/control/typedservice.hxx>
-%}
-
-%newobject findTypedService;
-%include "typedservice.hxx"
-
-
