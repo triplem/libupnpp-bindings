@@ -1,6 +1,6 @@
 .deps
 .libs
-Makefile
+./Makefile
 Makefile.in
 _upnpp.so
 aclocal.m4
@@ -20,3 +20,4 @@ upnpp.py
 upnpp.pyc
 upnpp_wrap.cxx
 upnpp_wrap.lo
+doc/upnpp-python.html

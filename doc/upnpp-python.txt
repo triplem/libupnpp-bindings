@@ -1,0 +1,125 @@
+= A Python interface for libupnpp
+
+This document describes very preliminary, but possibly useful, Python
+bindings for libupnpp.
+
+The approach chosen for now was not to try replicating the C++ interface,
+because it has many quirks which would make it complicated and needing
+quite a lot of additional glue code.
+
+Rather the main interface is a simpler string-based one, where the lib
+takes care of discovery and SOAP encoding, but the Python program must deal
+with the data (for example, parsing the XML in Content Directory records or
+AVTransport events). This could of course easily be exended, either by
+providing bindings for the libupnpp parsers, or by parsing the XML in the
+Python side.
+
+As it is, the interface makes it easy to write quick programs to interface
+with UPnP devices, querying their state, requesting changes, and receiving
+events.
+
+== Discovery
+
+The Discovery interface is geared for linking services, and is provided by
+a single function:
+
+----
+import upnpp
+
+service = upnpp.findTypedService(devname, servicename, fuzzy)
+----
+
+`devname` defines the device and can be provided either as an UUID or as a
+case-insensitive 'friendly name'.
+
+`servicename` can be provided either as an exact service string
+(e.g. 'urn:schemas-upnp-org:service:AVTransport:1'), or, if `fuzzy` is 'True'
+as a case-insensitive substring (e.g. 'avtransport').
+
+The returned value is 'None' if the device/service is not found.
+
+There is no provision for listing the device directory for now.
+
+== Actions
+
+Once connected to a service, its 'runAction' method allows calling one of
+its actions.
+
+----
+import upnpp
+
+args = upnpp.VectorString()
+retdata = upnpp.MapStringString()
+
+action = "SomeAction"
+
+args.append("arg1")
+args.append("arg2")
+
+ret = srv.runAction(action, args, retdata)
+
+if ret:
+    print("%s failed with %d" % (action, ret))
+else:
+    if len(retdata) != 0:
+        for nm, val in retdata.iteritems():
+            print("    %s : %s" % (nm, val))
+----
+
+
+`action` is the action name (e.g. 'GetMediaInfo').
+
+`args` is an array of strings holding the action parameters, in the
+order prescribed by the service definition.
+
+`retdata` is a dictionary for the return values.
+
+The strange 'VectorString' and 'MapStringString' types are due to the
+direct mapping between Python and the C++ interface. Of course, it would be
+possible to provide another layer for translating from natural Python types
+to these.
+
+The method returns 0 for success or an integer pupnp error code.
+
+== Events
+
+The library allows subscribing to the events for a service. 
+
+----
+import time
+import upnpp
+
+srv = upnpp.findTypedService(friendlyname, fuzzyservicename, True)
+
+class EventReporter:
+   def upnp_event(self, nm, value):
+      print("%s -> %s" % (nm, value))
+
+reporter = EventReporter()
+# You do need to store the result of installReporter
+bridge = upnpp.installReporter(srv, reporter)
+
+while True:
+   time.sleep(20000)
+----
+
+Unfortunately, the libupnpp C++ service class has no interface suitable for
+doing this directly from Python, so a bridge class was defined to provide
+the translation.
+
+You need to define a class with an 'upnp_event' method which is the user
+callback, create an instance, and subscribe to events by calling
+'upnpp.installReporter', which returns an object which you need to store
+somewhere (until you want to unsubscribe from the service events).
+
+Calling 'installReporter' from an 'EventReporter' method and storing the
+result in the object has the consequence that the EventReporter object (and
+the bridge object) will not be automatically deleted because the bridge
+holds a reference to the user object. If you want to do this, you need to
+explicitly delete the bridge object for unsubscribing. See the 'events.py'
+sample for examples of the two approaches and more explanation.
+
+This is quite unnatural, and I'd be glad to take hints from a swig/python
+master on the subject... However, it works.
+
+

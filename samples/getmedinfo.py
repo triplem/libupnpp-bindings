@@ -27,19 +27,12 @@ if not srv:
    debug("findTypedService failed")
    sys.exit(1)
 
-res =  srv.serviceTypeMatch("Some string")
-srv.mycallback = "hello"
-
-print("%s %s %s"%(srv.mycallback, res, repr(srv)))
-
-sys.exit(0)
-
 args = upnpp.VectorString()
 retdata = upnpp.MapStringString()
 
+args.append("0")
 
 while True:
-    args = ["0"]
     runaction(srv, "GetMediaInfo", args, retdata)
     time.sleep(2)
 
