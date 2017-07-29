@@ -8,7 +8,10 @@ import upnpp
 
 def debug(x):
    print("%s" % x, file = sys.stderr)
-
+def usage():
+   debug("Usage: getmedinfo.py devname")
+   sys.exit(1)
+   
 if len(sys.argv) != 2:
    usage()
 devname = sys.argv[1]

@@ -28,6 +28,6 @@ AC_MSG_RESULT([$PYTHON_LIB])
 AC_ARG_VAR(PYTHON_LIB, [Directory to install python bindings in])
 
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile python/Makefile])
 AC_OUTPUT
 
