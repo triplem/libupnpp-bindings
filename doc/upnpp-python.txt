@@ -1,24 +1,26 @@
 = A Python interface for libupnpp
 
-This document describes a basic Python UPnP control interface based on
-*libupnpp*.
+This document describes a Python UPnP control interface based on *libupnpp*.
 
-The *libupnpp* interface does a lot of work to translate the data from
-well-known services, for easy use by the application. However, the full C++
-API has many quirks which would make it complicated to use with Swig and
-would need quite a lot of additional glue code.
+*libupnpp* does a lot of work to translate the data from well-known
+services to C\++ natural data structures. However, the full C++ API has
+many quirks which would make it complicated to use with Swig and would need
+quite a lot of additional glue code.
 
 So the initial Python interface is a simpler string-based one, where the
 module mostly takes care of discovery and SOAP encoding, but the Python
 program must deal with some of the data decoding (for example, parsing the
-XML in AVTransport events).
+XML in `AVTransport` events).
 
-However, there is support for parsing Content Directory data (XML DIDL
-format), which is probably the most common need.
+However, the Python module does have support for parsing Content Directory
+data (XML DIDL format), which is probably the most common need.
 
 As it is, the interface makes it easy to write quick programs to interface
 with UPnP devices, querying their state, requesting changes, and receiving
 events.
+
+You will need the git version of libupnpp (0.16 branch) for building the
+Python interface.
 
 == Discovery
 
@@ -46,6 +48,8 @@ There is no provision for listing the device directory for now.
 
 Once connected to a service, its 'runAction' method allows calling one of
 its actions.
+
+See the 'samples/getmedinfo.py' sample script for a working example.
 
 ----
 import upnpp
@@ -189,7 +193,7 @@ repository:
 Dependencies:
 
  - autotools (autoconf/automake/libtool)
- - libupnpp devel package
+ - libupnpp (0.16 branch from git at this moment).
  - swig (at least 2.0 I think).
 
 Then:
