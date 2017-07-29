@@ -9,6 +9,10 @@ import upnpp
 def debug(x):
    print("%s" % x, file = sys.stderr)
 
+if len(sys.argv) != 2:
+   usage()
+devname = sys.argv[1]
+
 def runaction(srv, action, args, retdata):
    ret = srv.runAction(action, args, retdata)
    if ret:
@@ -21,7 +25,7 @@ def runaction(srv, action, args, retdata):
             debug("    %s : %s" % (nm, val))
    return ret
    
-srv = upnpp.findTypedService("UpMpd-r31", "avtransport", True)
+srv = upnpp.findTypedService(devname, "avtransport", True)
 
 if not srv:
    debug("findTypedService failed")
@@ -32,7 +36,24 @@ retdata = upnpp.MapStringString()
 
 args.append("0")
 
-while True:
-    runaction(srv, "GetMediaInfo", args, retdata)
-    time.sleep(2)
+runaction(srv, "GetMediaInfo", args, retdata)
 
+metadata = retdata["CurrentURIMetaData"]
+if metadata:
+   print("\nParsed metadata:")
+
+   dirc = upnpp.UPnPDirContent()
+   dirc.parse(metadata)
+
+   if dirc.m_items.size():
+      dirobj = dirc.m_items[0]
+      print("  title: %s "% dirobj.m_title)
+      for nm, val in dirobj.m_props.iteritems():
+         print("  %s : %s" % (nm, val))
+
+      resources = dirobj.m_resources
+      if len(resources):
+         print("Resource object details:")
+         for nm, val in resources[0].m_props.iteritems():
+            print("  %s : %s" % (nm, val))
+   

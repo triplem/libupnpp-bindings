@@ -1,18 +1,20 @@
 = A Python interface for libupnpp
 
-This document describes very preliminary, but possibly useful, Python
-bindings for libupnpp.
+This document describes a basic Python UPnP control interface based on
+*libupnpp*.
 
-The approach chosen for now was not to try replicating the C++ interface,
-because it has many quirks which would make it complicated and needing
-quite a lot of additional glue code.
+The *libupnpp* interface does a lot of work to translate the data from
+well-known services, for easy use by the application. However, the full C++
+API has many quirks which would make it complicated to use with Swig and
+would need quite a lot of additional glue code.
 
-Rather the main interface is a simpler string-based one, where the lib
-takes care of discovery and SOAP encoding, but the Python program must deal
-with the data (for example, parsing the XML in Content Directory records or
-AVTransport events). This could of course easily be exended, either by
-providing bindings for the libupnpp parsers, or by parsing the XML in the
-Python side.
+So the initial Python interface is a simpler string-based one, where the
+module mostly takes care of discovery and SOAP encoding, but the Python
+program must deal with some of the data decoding (for example, parsing the
+XML in AVTransport events).
+
+However, there is support for parsing Content Directory data (XML DIDL
+format), which is probably the most common need.
 
 As it is, the interface makes it easy to write quick programs to interface
 with UPnP devices, querying their state, requesting changes, and receiving
@@ -20,8 +22,8 @@ events.
 
 == Discovery
 
-The Discovery interface is geared for linking services, and is provided by
-a single function:
+The Discovery interface is designed for accessing services, and is provided
+by a single function:
 
 ----
 import upnpp
@@ -83,7 +85,7 @@ The method returns 0 for success or an integer pupnp error code.
 
 == Events
 
-The library allows subscribing to the events for a service. 
+The module allows subscribing to a service's events.
 
 ----
 import time
@@ -103,23 +105,99 @@ while True:
    time.sleep(20000)
 ----
 
-Unfortunately, the libupnpp C++ service class has no interface suitable for
+See the 'events.py' sample.
+
+Unfortunately, the *libupnpp* C++ service class has no interface suitable for
 doing this directly from Python, so a bridge class was defined to provide
 the translation.
 
-You need to define a class with an 'upnp_event' method which is the user
+You need to define a class with an 'upnp_event()' method which is the user
 callback, create an instance, and subscribe to events by calling
-'upnpp.installReporter', which returns an object which you need to store
-somewhere (until you want to unsubscribe from the service events).
+'upnpp.installReporter()', which returns an object which you need to store,
+until you want to unsubscribe from the service events.
 
-Calling 'installReporter' from an 'EventReporter' method and storing the
-result in the object has the consequence that the EventReporter object (and
+Calling 'installReporter()' from an 'EventReporter' method and storing the
+result in the object has the consequence that the 'EventReporter' object (and
 the bridge object) will not be automatically deleted because the bridge
 holds a reference to the user object. If you want to do this, you need to
 explicitly delete the bridge object for unsubscribing. See the 'events.py'
 sample for examples of the two approaches and more explanation.
 
-This is quite unnatural, and I'd be glad to take hints from a swig/python
+This is quite unnatural, and I'd be glad to take hints from a Swig/Python
 master on the subject... However, it works.
 
 
+== Data parsers
+
+=== Content Directory records
+
+UPnP accepts and outputs track metadata in an XML format named 'DIDL lite'.
+
+The Python wrapper gives access to the functions from the 'cdirobject.hxx'
+*libupnpp* module, which can translate from the XML format.
+
+The main class is 'upnpp.UPnPDirContent', which performs the parsing, and
+has vector members for items and containers entries.
+
+An example follows, taken from the 'getmedinfo.py' sample, accessing the
+current metadata from a 'GetMediaInfo' command. For this command, if
+'CurrentURIMetaData' is set, it is the metadata for the currently playing
+track, and there will be a single item, from which we extract the title and
+properties, then the details from the resource entry (which describe the
+actual format details).
+
+Refer to the comments in 'cdircontent.hxx' for more details on the data
+structures, which are just reflected in the Python objects.
+
+----
+import upnpp
+srv = upnpp.findTypedService(devname, "avtransport", True)
+args = upnpp.VectorString()
+retdata = upnpp.MapStringString()
+args.append("0")
+runaction(srv, "GetMediaInfo", args, retdata)
+
+metadata = retdata["CurrentURIMetaData"]
+if metadata:
+   print("\nParsed metadata:")
+
+   dirc = upnpp.UPnPDirContent()
+   dirc.parse(metadata)
+
+   if dirc.m_items.size():
+      dirobj = dirc.m_items[0]
+      print("  title: %s "% dirobj.m_title)
+      for nm, val in dirobj.m_props.iteritems():
+         print("  %s : %s" % (nm, val))
+
+      resources = dirobj.m_resources
+      if len(resources):
+         print("Resource object details:")
+         for nm, val in resources[0].m_props.iteritems():
+            print("  %s : %s" % (nm, val))
+   
+----
+
+
+== Building and installing
+
+There are no packages or releases for now, you need to clone the Git
+repository:
+
+    git clone  https://medoc@opensourceprojects.eu/git/p/libupnppbinding/code   libupnpp-bindings
+
+Dependencies:
+
+ - autotools (autoconf/automake/libtool)
+ - libupnpp devel package
+ - swig (at least 2.0 I think).
+
+Then:
+
+   cd libupnpp-bindings
+   sh autogen.sh
+   configure --prefix=/usr
+   make
+   sudo make install
+   
+There are a number of small example scripts in the 'samples/' directory.

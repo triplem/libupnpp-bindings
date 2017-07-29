@@ -179,4 +179,8 @@ int AVTGetPositionInfo(UPnPClient::AVTransport *tp, AVTPositionInfo *inf)
     }
     return ret;
 }
+
 %}
+
+%template(VectorUPnPDirContent)  std::vector<UPnPClient::UPnPDirObject>;
+%template(VectorUPnPResource)  std::vector<UPnPClient::UPnPResource>;

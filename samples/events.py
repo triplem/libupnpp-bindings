@@ -22,11 +22,11 @@ def usage():
 
 if len(sys.argv) != 3:
    usage()
-friendlyname = sys.argv[1]
+devname = sys.argv[1]
 fuzzyservicename = sys.argv[2]
 
 
-srv = upnpp.findTypedService(friendlyname, fuzzyservicename, True)
+srv = upnpp.findTypedService(devname, fuzzyservicename, True)
 
 if not srv:
    debug("findTypedService failed")
