@@ -186,22 +186,37 @@ if metadata:
 == Building and installing
 
 There are no packages or releases for now, you need to clone the Git
-repository:
-
-    git clone  https://medoc@opensourceprojects.eu/git/p/libupnppbinding/code   libupnpp-bindings
+repositories for libupnpp and libupnpp-bindings
 
 Dependencies:
 
+ - Python 2 development package
  - autotools (autoconf/automake/libtool)
  - libupnpp (0.16 branch from git at this moment).
- - swig (at least 2.0 I think).
+ - Swig (at least 2.0 I think).
 
-Then:
 
-   cd libupnpp-bindings
-   sh autogen.sh
-   configure --prefix=/usr
-   make
-   sudo make install
-   
-There are a number of small example scripts in the 'samples/' directory.
+++++
+<pre>
+git&nbsp;clone&nbsp;https://medoc@opensourceprojects.eu/git/p/libupnpp/code&nbsp;libupnpp
+cd libupnpp/
+git checkout 0.16
+sh autogen.sh 
+configure --prefix=/usr
+make
+sudo make install
+
+cd ..
+git&nbsp;clone&nbsp;https://medoc@opensourceprojects.eu/git/p/libupnppbinding/code&nbsp;libupnpp-bindings
+cd libupnpp-bindings
+sh autogen.sh 
+configure --prefix=/usr
+make
+sudo make install
+</pre>
+++++
+
+
+There are a number of small example scripts in the 'samples/' directory to
+try things out.
+

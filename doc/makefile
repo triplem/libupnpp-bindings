@@ -1,6 +1,6 @@
 .SUFFIXES: .txt .html
 
 .txt.html:
-	asciidoc $<
+	asciidoc -a toc $<
 
 all: upnpp-python.html
