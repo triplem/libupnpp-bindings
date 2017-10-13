@@ -21,4 +21,5 @@ python/upnpp.py
 python/upnpp.pyc
 python/upnpp_wrap.cxx
 python/upnpp_wrap.lo
-python/upnpp/
+python/upnpp/upnpp.py
+python/upnpp/upnpp.pyc
