@@ -16,30 +16,13 @@ if len(sys.argv) != 2:
    usage()
 devname = sys.argv[1]
 
-def runaction(srv, action, args, retdata):
-   ret = srv.runAction(action, args, retdata)
-   if ret:
-      debug("%s failed with %d" % (action, ret))
-   else:
-      debug("%s succeeded" % action)
-      if len(retdata) != 0:
-         debug("Got data:")
-         for nm, val in retdata.iteritems():
-            debug("    %s : %s" % (nm, val))
-   return ret
-   
 srv = upnpp.findTypedService(devname, "avtransport", True)
 
 if not srv:
    debug("findTypedService failed")
    sys.exit(1)
 
-args = upnpp.VectorString()
-retdata = upnpp.MapStringString()
-
-args.append("0")
-
-runaction(srv, "GetMediaInfo", args, retdata)
+retdata = upnpp.runaction(srv, "GetMediaInfo", ["0"])
 
 metadata = retdata["CurrentURIMetaData"]
 if metadata:

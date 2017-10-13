@@ -9,53 +9,31 @@ import upnpp
 def debug(x):
    print("%s" % x, file = sys.stderr)
 
-def runaction(srv, action, args, retdata):
-   ret = srv.runAction(action, args, retdata)
-   if ret:
-      debug("%s failed with %d" % (action, ret))
-   else:
-      debug("%s succeeded" % action)
-      if len(retdata) != 0:
-         debug("Got data:")
-         for nm, val in retdata.iteritems():
-            debug("    %s : %s" % (nm, val))
-   return ret
-   
-
-
 srv = upnpp.findTypedService("UpMpd-bureau", "avtransport", True)
 
 if not srv:
    debug("findTypedService failed")
    sys.exit(1)
    
-args = upnpp.VectorString()
-retdata = upnpp.MapStringString()
-
 args = ["0", "http://192.168.4.4:9790/minimserver/*/mp3/variete/billy_joel/the_stranger/01*20-*20Movin*27*20Out*20(Anthony*27s*20Song).mp3", ""]
-# runaction(srv, "SetAVTransportURI", args, retdata)
+# retdata = upnpp.runaction(srv, "SetAVTransportURI", args)
 
 # Instanceid speed
-args = ["0", "1"]
-# runaction(srv, "Play", args, retdata)
+# retdata = upnpp.runaction(srv, "Play", ["0", "1"])
 
 def seekloop():
    for i in range(0,3):
       # InstanceId, Unit, target
-      args = ["0", "REL_TIME", "0:0:30"]
-      runaction(srv, "Seek", args, retdata)
-      args = ["0"]
-      runaction(srv, "GetMediaInfo", args, retdata)
+      retdata = upnpp.runaction(srv, "Seek", ["0", "REL_TIME", "0:0:30"])
+      retdata = upnpp.runaction(srv, "GetMediaInfo", ["0"])
       time.sleep(2)
 
-#args = ["0", "REL_TIME", "0:20:30"]
-#runaction(srv, "Seek", args, retdata)
+#retdata = upnpp.runaction(srv, "Seek", ["0", "REL_TIME", "0:20:30"])
 
-args = ["0"]
-runaction(srv, "GetPositionInfo", args, retdata)
 
-args = ["0"]
-# runaction(srv, "Stop", args, retdata)
+retdata = upnpp.runaction(srv, "GetPositionInfo", ["0"])
+
+retdata = upnpp.runaction(srv, "Stop", ["0"])
 
 
 # Get in touch with discovery service

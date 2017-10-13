@@ -91,6 +91,24 @@ PythonReporter *installReporter(UPnPClient::TypedService *srv, PyObject *o)
 }
 %}
 
+%pythoncode %{
+def _makeVS(l):
+    ret = VectorString()
+    for v in l:
+        ret.append(v)
+    return ret
+def runaction(dev, action, args):
+    args = _makeVS(args)
+    retdata = MapStringString()
+    ret = dev.runAction(action, args, retdata)
+    if ret:
+        return None
+    retdict = {}
+    for nm, val in retdata.iteritems():
+        retdict[nm] = val
+    return retdict
+%}
+
 %init %{
 if (! PyEval_ThreadsInitialized()) {
     PyEval_InitThreads();
