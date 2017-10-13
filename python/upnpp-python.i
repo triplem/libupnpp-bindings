@@ -98,6 +98,7 @@ def _makeVS(l):
         ret.append(v)
     return ret
 def runaction(dev, action, args):
+    '''Wrap runAction() method, using natural python types (list and dict).'''
     args = _makeVS(args)
     retdata = MapStringString()
     ret = dev.runAction(action, args, retdata)

@@ -87,6 +87,16 @@ to these.
 
 The method returns 0 for success or an integer pupnp error code.
 
+The wrapper module also defines a runaction() method which takes natural
+Python arguments and returns a Python dictionary. The exact error code is
+not returned by the method though (returns None on error). Example:
+
+----
+retdata = upnpp.runaction(srv, "GetMediaInfo", ["0"])
+
+metadata = retdata["CurrentURIMetaData"]
+----
+
 == Events
 
 The module allows subscribing to a service's events.
