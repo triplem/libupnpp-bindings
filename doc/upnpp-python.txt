@@ -5,12 +5,12 @@ This document describes a Python UPnP control interface based on *libupnpp*.
 *libupnpp* does a lot of work to translate the data from well-known
 services to C\++ natural data structures. However, the full C++ API has
 many quirks which would make it complicated to use with Swig and would need
-quite a lot of additional glue code.
+quite a lot of additional glue code (tldr: I'm not skilled enough).
 
-So the initial Python interface is a simpler string-based one, where the
-module mostly takes care of discovery and SOAP encoding, but the Python
-program must deal with some of the data decoding (for example, parsing the
-XML in `AVTransport` events).
+So most of the Python interface is for now a simpler string-based one,
+where the module mostly takes care of discovery and SOAP encoding, but the
+Python program must deal with some of the data decoding (for example,
+parsing the XML in `AVTransport` events).
 
 However, the Python module does have support for parsing Content Directory
 data (XML DIDL format), which is probably the most common need.
@@ -19,8 +19,7 @@ As it is, the interface makes it easy to write quick programs to interface
 with UPnP devices, querying their state, requesting changes, and receiving
 events.
 
-You will need the git version of libupnpp (0.16 branch) for building the
-Python interface.
+The Python interface is compatible with libupnpp versions 0.16 and later.
 
 == Discovery
 
@@ -79,17 +78,14 @@ else:
 order prescribed by the service definition.
 
 `retdata` is a dictionary for the return values.
-
-The strange 'VectorString' and 'MapStringString' types are due to the
-direct mapping between Python and the C++ interface. Of course, it would be
-possible to provide another layer for translating from natural Python types
-to these.
-
 The method returns 0 for success or an integer pupnp error code.
 
-The wrapper module also defines a runaction() method which takes natural
-Python arguments and returns a Python dictionary. The exact error code is
-not returned by the method though (returns None on error). Example:
+The strange 'VectorString' and 'MapStringString' types are due to the
+direct mapping between Python and the C++ interface. The wrapper module
+also defines a runaction() method which takes natural Python arguments and
+returns a Python dictionary. The exact error code is not returned by the
+method though (returns None on error). This is not a major issue because
+libupnpp error codes are not exactly helpful in general. Example:
 
 ----
 retdata = upnpp.runaction(srv, "GetMediaInfo", ["0"])
@@ -202,7 +198,7 @@ Dependencies:
 
  - Python 2 development package
  - autotools (autoconf/automake/libtool)
- - libupnpp (0.16 branch from git at this moment).
+ - libupnpp (the master branch)
  - Swig (at least 2.0 I think).
 
 
@@ -229,4 +225,3 @@ sudo make install
 
 There are a number of small example scripts in the 'samples/' directory to
 try things out.
-
