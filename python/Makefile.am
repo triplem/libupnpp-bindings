@@ -16,6 +16,7 @@ pkgpylib_DATA = upnpp/__init__.py upnpp/upnpp.py
 pkgpylib_LTLIBRARIES = _upnpp.la
 
 upnpp/upnpp.py: $(top_srcdir)/python/upnpp.py
+	mkdir -p upnpp
 	cp -p $(top_srcdir)/python/upnpp.py upnpp/upnpp.py
 
 _upnpp_la_LDFLAGS = -avoid-version -module -no-undefined -shrext .so
