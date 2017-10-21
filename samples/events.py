@@ -10,7 +10,7 @@ def debug(x):
 def usage():
    debug(
       "Usage: events.py <renderer> <service>\n" \
-      "Sample script: will sleep for 20 S, printing events from the " \
+      "Sample script: will sleep forever, printing events from the " \
       "specified \n    renderer and service\n"
       " renderer can be specified as a case-insensitive friendly name or "
       "an exact UUID\n"
@@ -33,9 +33,9 @@ if not srv:
    sys.exit(1)
 
 
-# If the event reporter object holds a ref to the bridge class
-# nobody ever gets deleted except if we explicitly call uninstall
-# (because circular reference). This makes things more complicated.
+# If the event reporter object holds a ref to the bridge class nobody
+# ever gets deleted (because of circular reference) except if we
+# explicitly call uninstall . This makes things more complicated.
 def bridgeref_reporter_nogood():
    class EventReporter(object):
       def __init__(self, srv):
@@ -50,9 +50,9 @@ def bridgeref_reporter_nogood():
       def upnp_event(self, nm, value):
          print("%s -> %s" % (nm, value))
 
-   r = EventReporter(srv)
+   reporter = EventReporter(srv)
    time.sleep(4)
-   r.uninstall()
+   reporter.uninstall()
 
 
 
@@ -62,6 +62,7 @@ class EventReporter:
       print("%s -> %s" % (nm, value))
 
 reporter = EventReporter()
+
 # You do need to store the result of installReporter
 bridge = upnpp.installReporter(srv, reporter)
 

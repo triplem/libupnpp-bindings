@@ -36,7 +36,7 @@ namespace std {
 %template(MapStringString) map<string,string>;
 }   
 
-
+%include <libupnpp/log.h>
 
 /*************************************************************************
  * Incomplete wrappers for avtransport and renderingcontrol. Not very
