@@ -11,7 +11,7 @@ SWIG_includes = -I$(top_srcdir) -I/usr/include
 
 BUILT_SOURCES = upnpp_wrap.cxx upnpp.py
 
-pkgpylibdir = @PYTHON_LIB@/upnpp
+pkgpylibdir = @PYTHON_SITE_PKG@/upnpp
 pkgpylib_DATA = upnpp/__init__.py upnpp/upnpp.py
 pkgpylib_LTLIBRARIES = _upnpp.la
 
