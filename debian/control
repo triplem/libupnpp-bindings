@@ -1,0 +1,30 @@
+Source: libupnpp-bindings
+Section: libs
+Priority: optional
+Maintainer: Jean-Francois Dockes <jf@dockes.org>
+Build-Depends: debhelper (>= 9), dh-python, python, python-all-dev (>= 2.6.6-3~), python3, python3-all-dev, libupnpp4-dev (>= 0.16.0), autotools-dev
+X-Python-Version: >= 2.6
+Standards-Version: 3.9.8
+Homepage: https://www.lesbonscomptes.com/upmpdcli/
+
+Package: python-libupnpp
+Section: python
+Architecture: any
+Depends: ${python:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Provides: ${python:Provides}
+Description: libupnpp UPnP library interface for Python
+ This package provides libupnpp Python bindings.
+ .
+ libupnpp wraps libupnp calls and data inside easier to use C++ constructs.
+ It can be used to build either devices or control points. 
+
+Package: python3-libupnpp
+Section: python
+Architecture: any
+Depends: ${python3:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Provides: ${python3:Provides}
+Description: libupnpp UPnP library interface for Python3
+ This package provides libupnpp Python3 bindings.
+ .
+ libupnpp wraps libupnp calls and data inside easier to use C++ constructs.
+ It can be used to build either devices or control points. 

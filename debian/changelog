@@ -1,0 +1,5 @@
+libupnpp-bindings (0.16.0-1) unstable; urgency=medium
+
+  * Initial release. Python only
+
+ -- Jean-Francois Dockes <jf@dockes.org>  Mon, 13 Nov 2017 19:05:05 +1000
