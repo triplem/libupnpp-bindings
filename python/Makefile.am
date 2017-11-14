@@ -9,6 +9,8 @@ SWIG_sources = $(top_srcdir)/python/upnpp-python.i \
              $(top_srcdir)/upnpp.i 
 SWIG_includes = -I$(top_srcdir) -I/usr/include
 
+EXTRA_DIST = upnpp-python.i upnpp.py upnpp/__init__.py
+
 BUILT_SOURCES = upnpp_wrap.cxx upnpp.py
 
 pkgpylibdir = @PYTHON_SITE_PKG@/upnpp

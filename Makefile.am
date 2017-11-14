@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = . python
+EXTRA_DIST = upnpp-head.i  upnpp.i
 
+SUBDIRS = . python
