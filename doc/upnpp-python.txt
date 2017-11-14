@@ -7,10 +7,10 @@ services to C\++ natural data structures. However, the full C++ API has
 many quirks which would make it complicated to use with Swig and would need
 quite a lot of additional glue code (tldr: I'm not skilled enough).
 
-So most of the Python interface is for now a simpler string-based one,
-where the module mostly takes care of discovery and SOAP encoding, but the
-Python program must deal with some of the data decoding (for example,
-parsing the XML in `AVTransport` events).
+So the current Python interface is a simpler and string-based. The module
+takes care of discovery and SOAP encoding, but the Python program must deal
+with some of the data decoding (for example, parsing the XML in
+`AVTransport` events).
 
 However, the Python module does have support for parsing Content Directory
 data (XML DIDL format), which is probably the most common need.
@@ -45,53 +45,40 @@ There is no provision for listing the device directory for now.
 
 == Actions
 
-Once connected to a service, its 'runAction' method allows calling one of
-its actions.
+Once connected to a service, its 'runAction()' method allows calling one of
+its actions. You will normally use a simpler wrapper named 'runaction()'
+
+runaction() takes three arguments:
+
+- The service object.
+- The action name.
+- The action UPnP arguments list (as strings), in the order prescribed by
+  the service definition.
+
+The function returns a dictionary with the action result variables.
+
+Note that you will need to have a look at the action documentation, or at
+the service XML definition to determine what the expected arguments are.
 
 See the 'samples/getmedinfo.py' sample script for a working example.
 
 ----
 import upnpp
 
-args = upnpp.VectorString()
-retdata = upnpp.MapStringString()
+# SetAVTRansportURI arguments: instance #, url, metadata (empty here).
+retdata = upnpp.runaction(service, "SetAVTransportURI", ["0", url, ""])
 
-action = "SomeAction"
-
-args.append("arg1")
-args.append("arg2")
-
-ret = srv.runAction(action, args, retdata)
-
-if ret:
-    print("%s failed with %d" % (action, ret))
-else:
-    if len(retdata) != 0:
-        for nm, val in retdata.iteritems():
-            print("    %s : %s" % (nm, val))
-----
-
-
-`action` is the action name (e.g. 'GetMediaInfo').
-
-`args` is an array of strings holding the action parameters, in the
-order prescribed by the service definition.
-
-`retdata` is a dictionary for the return values.
-The method returns 0 for success or an integer pupnp error code.
-
-The strange 'VectorString' and 'MapStringString' types are due to the
-direct mapping between Python and the C++ interface. The wrapper module
-also defines a runaction() method which takes natural Python arguments and
-returns a Python dictionary. The exact error code is not returned by the
-method though (returns None on error). This is not a major issue because
-libupnpp error codes are not exactly helpful in general. Example:
-
-----
+# GetMediaInfo arguments: instance #.
 retdata = upnpp.runaction(srv, "GetMediaInfo", ["0"])
 
-metadata = retdata["CurrentURIMetaData"]
+if retdata:
+   for nm, val in retdata.iteritems():
+       print("    %s : %s" % (nm, val))
+else:
+    # Action failed, do something
+    pass
 ----
+
 
 == Events
 
@@ -156,8 +143,9 @@ track, and there will be a single item, from which we extract the title and
 properties, then the details from the resource entry (which describe the
 actual format details).
 
-Refer to the comments in 'cdircontent.hxx' for more details on the data
-structures, which are just reflected in the Python objects.
+Refer to the comments in the libupnpp 'libupnpp/control/cdircontent.hxx'
+source file for more details on the data structures, which are just
+reflected in the Python objects.
 
 ----
 import upnpp
@@ -189,30 +177,18 @@ if metadata:
 ----
 
 
-== Building and installing
-
-There are no packages or releases for now, you need to clone the Git
-repositories for libupnpp and libupnpp-bindings
+== Building git code and installing
 
 Dependencies:
 
- - Python 2 development package
+ - Python development package
  - autotools (autoconf/automake/libtool)
- - libupnpp (the master branch)
- - Swig (at least 2.0 I think).
+ - libupnpp 0.16.0 or later
+ - Swig (at least 2.0).
 
 
 ++++
 <pre>
-git&nbsp;clone&nbsp;https://medoc@opensourceprojects.eu/git/p/libupnpp/code&nbsp;libupnpp
-cd libupnpp/
-git checkout 0.16
-sh autogen.sh 
-configure --prefix=/usr
-make
-sudo make install
-
-cd ..
 git&nbsp;clone&nbsp;https://medoc@opensourceprojects.eu/git/p/libupnppbinding/code&nbsp;libupnpp-bindings
 cd libupnpp-bindings
 sh autogen.sh 
@@ -225,3 +201,11 @@ sudo make install
 
 There are a number of small example scripts in the 'samples/' directory to
 try things out.
+
+The default build with be for the 'python' command (usually Python
+2.x). You can set the PYTHON_VERSION variable when running configure to
+change this:
+
+    configure --prefix=/usr PYTHON_VERSION=3
+
+
