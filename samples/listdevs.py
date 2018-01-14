@@ -16,21 +16,21 @@ def beginsWith(s, beg):
    return False
 
 renderers = []
-devices = upnpp.getDevices()
+descriptions = upnpp.getDevices()
 
-for dev in devices:
+for dev in descriptions:
    print("Device: UDN: [%s] fname [%s]" % (dev.UDN, dev.friendlyName))
    print("  type: %s" % dev.deviceType)
    hasrenderer=False
-   for service in dev.services:
-      print ("  service: %s" % service.serviceType)
-      if beginsWith(service.serviceType, avttype) or \
-         beginsWith(service.serviceType, ohpltype):
+   for srvdesc in dev.services:
+      print ("  service: %s" % srvdesc.serviceType)
+      if beginsWith(srvdesc.serviceType, avttype) or \
+         beginsWith(srvdesc.serviceType, ohpltype):
          hasrenderer = True
-      service.fetchAndParseDesc(dev.URLBase)
-      for var in service.stateTable:
+      srvdesc.fetchAndParseDesc(dev.URLBase)
+      for var in srvdesc.stateTable:
          print("    VARIABLE %s dataType %s" % (var.name, var.dataType))
-      for act in service.actionList:
+      for act in srvdesc.actionList:
          print("    ACTION %s args:" % act.name)
          for arg in act.argList:
             print("      ARGUMENT %s" % arg.name)

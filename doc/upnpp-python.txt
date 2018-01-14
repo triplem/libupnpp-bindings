@@ -21,10 +21,17 @@ events.
 
 The Python interface is compatible with libupnpp versions 0.16 and later.
 
+[[DISCOVERY]]
 == Discovery
 
-The Discovery interface is designed for accessing services, and is provided
-by a single function:
+There are two parts in the discovery interface: listing the devices on the
+network, and accessing a service designated by a device and service
+name. The latter is probably more commonly useful and will be described first.
+
+[[SERVICEACCESS]]
+=== Accessing a service
+
+This is provided by a single method, `findTypedService`
 
 ----
 import upnpp
@@ -41,8 +48,56 @@ as a case-insensitive substring (e.g. 'avtransport').
 
 The returned value is 'None' if the device/service is not found.
 
-There is no provision for listing the device directory for now.
+Once a service is returned, you can call its xref::ACTIONS[actions].
 
+[[DEVICELISTING]]
+=== Listing the network devices
+
+The `listDevices`() method returns a list of all the devices found in the
+network. The first call in a given process will incur a delay of
+approximately 2 seconds, while UPnP discovery completes. Further calls
+should be more or less instantaneous.
+
+The complete data structures are described in an
+xref::DEVICEDATA[annex]. We shall just give an overview here.
+
+----
+import upnpp
+
+descriptions = upnpp.getDevices()
+
+for devdesc in descriptions:
+   print("Device: UDN: [%s] fname [%s]" % (dev.UDN, dev.friendlyName))
+----
+
+Each device object contains a list of services. As returned by `getDevices`()
+the service objects only contain the basic elements: service type, and
+access URLs. A full description of the service, with all variables and
+action definitions, can be obtained by a call to
+`fetchAndParseDesc`().
+
+----
+import upnpp
+
+for srvdesc in dev.services:
+   print("  service: %s" % srvdesc.serviceType)
+   srvdesc.fetchAndParseDesc(dev.URLBase)
+   for var in srvdesc.stateTable:
+      print("    VARIABLE %s dataType %s" % (var.name, var.dataType))
+   for act in srvdesc.actionList:
+      print("    ACTION %s args:" % act.name)
+      for arg in act.argList:
+         print("      ARGUMENT %s" % arg.name)
+----
+
+Where +dev+ is an element of the list returned by `getDevices`().
+
+The full script can be found in the 'listdevs.py' sample.
+
+The data returned is sufficient to build dynamic calls to the actions,
+without any prior knowledge.
+
+[[ACTIONS]]
 == Actions
 
 Once connected to a service, its 'runAction()' method allows calling one of
@@ -208,4 +263,71 @@ change this:
 
     configure --prefix=/usr PYTHON_VERSION=3
 
+
+[[DEVICEDATA]]
+== Annex: full description of the `listDevices` data
+
+=== Device description object
+
+The elements of the device list returned by `listDevices`() have the
+following attributes:
+
+deviceType:: Device Type: e.g. urn:schemas-upnp-org:device:MediaServer:1
+friendlyName:: User-configurable name (usually), e.g. Lounge-streamer
+UDN:: Unique Device Number. This is the same as the deviceID in the
+discovery message. e.g. uuid:a7bdcd12-e6c1-4c7e-b588-3bbc959eda8d
+URLBase:: Base for all relative URLs. e.g. 'http://192.168.4.4:49152/'
+manufacturer:: Manufacturer: e.g. D-Link, PacketVideo
+modelName:: Model name: e.g. MediaTomb, DNS-327L
+XMLText::Raw description text
+services:: list of the device services.
+
+=== Service description object
+
+Each member of the device service list has the following attributes:
+
+serviceType:: Service Type
+e.g. 'urn:schemas-upnp-org:service:ConnectionManager:1'.
+serviceId:: Service Id inside device:
+e.g. 'urn:upnp-org:serviceId:ConnectionManager'.
+SCPDURL:: Service description URL.
+controlURL:: Service control URL.
+eventSubURL:: Service event URL.
+
+After calling the `fetchAndParseDesc`() method, the two additional members
+are populated:
+
+actionList:: the service actions.
+stateTable:: the service variables.
+
+=== Variables
+
+Attributes for the elements of the state variables lists:
+
+name:: the variable name.
+sendEvents:: True if changes to the value cause events.
+dataType:: the variable data type (e.g. `int`, `string`, `ui4`, see the
+UPnP docs).
+hasValueRange:: True if the possible values defined by a value range (see
+further). 
+minimum:: if hasValueRange is True: the minimum value.
+maximum::  if hasValueRange is True: the maximum value.
+step::  if hasValueRange is True: the step for values between min and max.
+
+=== Actions
+
+Attributes for the elements of the actions lists:
+
+name:: the action name.
+argList:: the action arguments list.
+
+=== Arguments
+
+Attributes for the elements of the arguments lists:
+
+name:: the argument name.
+todevice:: True if data goes to the device, False if it is returned by the
+call to the action.
+relatedVariable:: the name of a state variable which defines the argument
+type.
 
