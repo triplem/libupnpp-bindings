@@ -26,10 +26,12 @@ The Python interface is compatible with libupnpp versions 0.16 and later.
 
 There are two parts in the discovery interface: listing the devices on the
 network, and accessing a service designated by a device and service
-name. The latter is probably more commonly useful and will be described first.
+name.
+
+The latter is probably more commonly useful and will be described first. 
 
 [[SERVICEACCESS]]
-=== Accessing a service
+=== Accessing a specific service
 
 This is provided by a single method, `findTypedService`
 
@@ -59,7 +61,11 @@ approximately 2 seconds, while UPnP discovery completes. Further calls
 should be more or less instantaneous.
 
 The complete data structures are described in an
-xref::DEVICEDATA[annex]. We shall just give an overview here.
+xref::DEVICEDATA[annex]. We shall just give an overview here. In most
+cases, you will not need to deal programmatically with the service
+descriptions, you can just look up the arguments for a given action (in the
+UPnP documents or the service description), and then use
+`findTypedService`() and `runaction`().
 
 ----
 import upnpp
@@ -100,10 +106,10 @@ without any prior knowledge.
 [[ACTIONS]]
 == Actions
 
-Once connected to a service, its 'runAction()' method allows calling one of
-its actions. You will normally use a simpler wrapper named 'runaction()'
+Once connected to a service, its `runAction`() method allows calling one of
+its actions. You will normally use a simpler wrapper named `runaction`()
 
-runaction() takes three arguments:
+`runaction`() takes three arguments:
 
 - The service object.
 - The action name.
@@ -165,11 +171,11 @@ the translation.
 
 You need to define a class with an 'upnp_event()' method which is the user
 callback, create an instance, and subscribe to events by calling
-'upnpp.installReporter()', which returns an object which you need to store,
+`upnpp.installReporter`(), which returns an object which you need to store,
 until you want to unsubscribe from the service events.
 
-Calling 'installReporter()' from an 'EventReporter' method and storing the
-result in the object has the consequence that the 'EventReporter' object (and
+Calling `installReporter`() from an `EventReporter` method and storing the
+result in the object has the consequence that the `EventReporter` object (and
 the bridge object) will not be automatically deleted because the bridge
 holds a reference to the user object. If you want to do this, you need to
 explicitly delete the bridge object for unsubscribing. See the 'events.py'
@@ -188,12 +194,12 @@ UPnP accepts and outputs track metadata in an XML format named 'DIDL lite'.
 The Python wrapper gives access to the functions from the 'cdirobject.hxx'
 *libupnpp* module, which can translate from the XML format.
 
-The main class is 'upnpp.UPnPDirContent', which performs the parsing, and
+The main class is `upnpp.UPnPDirContent`, which performs the parsing, and
 has vector members for items and containers entries.
 
 An example follows, taken from the 'getmedinfo.py' sample, accessing the
-current metadata from a 'GetMediaInfo' command. For this command, if
-'CurrentURIMetaData' is set, it is the metadata for the currently playing
+current metadata from a `GetMediaInfo` command. For this command, if
+`CurrentURIMetaData` is set, it is the metadata for the currently playing
 track, and there will be a single item, from which we extract the title and
 properties, then the details from the resource entry (which describe the
 actual format details).
@@ -257,7 +263,7 @@ sudo make install
 There are a number of small example scripts in the 'samples/' directory to
 try things out.
 
-The default build with be for the 'python' command (usually Python
+The default build with be for the *python* command (usually Python
 2.x). You can set the PYTHON_VERSION variable when running configure to
 change this:
 
