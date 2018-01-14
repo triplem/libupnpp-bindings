@@ -77,8 +77,8 @@ struct CUPnPServiceVariable {
 %}
 
 namespace std {
-%template(UMapCUPnPServiceAction)  map<string, CUPnPServiceAction>;
-%template(UMapCUPnPServiceVariable)  map<string, CUPnPServiceVariable>;
+%template(VectorCUPnPServiceAction)  vector<CUPnPServiceAction>;
+%template(VectorCUPnPServiceVariable)  vector<CUPnPServiceVariable>;
 }
 
 %inline %{
@@ -107,20 +107,18 @@ struct CUPnPServiceDesc {
         if (!m_libservice.fetchAndParseDesc(urlbase, parsed, 0)) {
             return false;
         }
+        actionList.resize(parsed.actionList.size());
         for (const auto& entry : parsed.actionList) {
-            actionList.insert(
-                std::pair<std::string, CUPnPServiceAction>
-                (entry.first, entry.second));
+            actionList.push_back(entry.second);
         }
+        stateTable.resize(parsed.stateTable.size());
         for (const auto& entry : parsed.stateTable) {
-            stateTable.insert(
-                std::pair<std::string, CUPnPServiceVariable>
-                (entry.first, entry.second));
+            stateTable.push_back(entry.second);
         }
         return true;
     }
-    std::map<std::string, CUPnPServiceAction> actionList;
-    std::map<std::string, CUPnPServiceVariable> stateTable;
+    std::vector<CUPnPServiceAction> actionList;
+    std::vector<CUPnPServiceVariable> stateTable;
 private:
     // fetchAndParseDesc is a UPnPServiceDesc member, so we have to keep a copy
     // of the libupnpp object if we want to be able to call it.

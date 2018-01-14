@@ -28,10 +28,10 @@ for dev in devices:
          beginsWith(service.serviceType, ohpltype):
          hasrenderer = True
       service.fetchAndParseDesc(dev.URLBase)
-      for nm,var in service.stateTable.items():
-         print("    VARIABLE %s dataType %s"% (nm, var.dataType))
-      for nm,act in service.actionList.iteritems():
-         print("    ACTION %s args:" %nm)
+      for var in service.stateTable:
+         print("    VARIABLE %s dataType %s" % (var.name, var.dataType))
+      for act in service.actionList:
+         print("    ACTION %s args:" % act.name)
          for arg in act.argList:
             print("      ARGUMENT %s" % arg.name)
    if hasrenderer:
