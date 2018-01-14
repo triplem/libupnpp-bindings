@@ -1,3 +1,9 @@
+libupnpp-bindings (0.16.1-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
+
+  * Added more complete discovery interface.
+
+ -- Jean-Francois Dockes <jf@dockes.org>  Sun, 14 Jan 2018 19:05:05 +1000
+
 libupnpp-bindings (0.16.0-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
 
   * Initial release. Python only
