@@ -6,8 +6,9 @@ AM_CXXFLAGS = -std=c++11 $(AX_SWIG_PYTHON_CPPFLAGS)
 
 SWIG_sources = $(top_srcdir)/python/upnpp-python.i \
              $(top_srcdir)/upnpp-head.i \
+             $(top_srcdir)/upnpp-devs.i \
              $(top_srcdir)/upnpp.i 
-SWIG_includes = -I$(top_srcdir) -I/usr/include
+SWIG_includes = -I$(top_srcdir) @CPPFLAGS@ -I/usr/include
 
 EXTRA_DIST = upnpp-python.i upnpp.py upnpp/__init__.py
 

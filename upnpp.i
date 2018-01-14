@@ -38,19 +38,16 @@ namespace std {
 
 %include <libupnpp/log.h>
 
+/* Description and discovery */
+%include upnpp-devs.i
+
 /*************************************************************************
  * Incomplete wrappers for avtransport and renderingcontrol. Not very
  * useful, code kept around for reference.
  * Because there is no factory function, these need to deal explicitely
  * with discovery and description.
  */
-%warnfilter(325) UPnPClient::UPnPServiceDesc::Argument;
-%warnfilter(325) UPnPClient::UPnPServiceDesc::Action;
-%warnfilter(325) UPnPClient::UPnPServiceDesc::StateVariable;
-%warnfilter(325) UPnPClient::UPnPServiceDesc::Parsed;
 
-%include <libupnpp/control/description.hxx>
-%include <libupnpp/control/discovery.hxx>
 %include <libupnpp/control/renderingcontrol.hxx>
 
 %warnfilter(325) UPnPClient::AVTransport::MediaInfo;
