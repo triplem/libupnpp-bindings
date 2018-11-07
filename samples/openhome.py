@@ -25,6 +25,10 @@ if not srv:
    debug("'Product' service not found: device is not an openhome one")
    sys.exit(1)
 
+retdata = upnpp.runaction(srv, "Attributes", [])
+attributes = retdata["Value"]
+debug("Attributes: %s" % attributes)
+
 retdata = upnpp.runaction(srv, "SourceCount", [])
 sourcecount = int(retdata["Value"])
 retdata = upnpp.runaction(srv, "SourceIndex", [])
@@ -37,19 +41,22 @@ xml = ET.XML(sourcexml)
 sources = []
 for child1 in xml:
    nm = ''
+   snm = ''
    tp = ''
    for child2 in child1:
       if child2.tag == 'Name':
          nm = child2.text
+      if child2.tag == 'SystemName':
+         snm = child2.text
       elif child2.tag == 'Type':
          tp = child2.text
-   sources.append((nm, tp))
+   sources.append((nm, snm, tp))
 
 if sourceindex < 0 or sourceindex >= len(sources):
    debug("No current source")
    sys.exit(1)
 
-print("Current source name %s, type %s" % sources[sourceindex])
+print("Current source name %s, systemName %s type %s" % sources[sourceindex])
 
 sourcetype = sources[sourceindex][1]
 if sourcetype == "Playlist":
