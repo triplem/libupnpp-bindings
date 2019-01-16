@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Jean-Francois Dockes <jf@dockes.org>
 Build-Depends: debhelper (>= 9), dh-python, python,
                python-all-dev (>= 2.6.6-3~), python3, python3-all-dev,
-               libupnpp4-dev (>= 0.16.0), libupnp6-dev, autotools-dev
+               libupnpp5-dev (>= 0.17.0), libupnp6-dev, autotools-dev
 X-Python-Version: >= 2.6
 Standards-Version: 3.9.8
 Homepage: https://www.lesbonscomptes.com/upmpdcli/
