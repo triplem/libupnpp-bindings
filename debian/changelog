@@ -1,3 +1,9 @@
+libupnpp-bindings (0.18.0-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
+
+  * No changes: just to go along with libupnpp 0.18 (libupnpp6)
+
+ -- Jean-Francois Dockes <jf@dockes.org>  Wed, 16 Jan 2019 09:56:05 +1000
+
 libupnpp-bindings (0.17.0-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
 
   * No changes: just to go along with libupnpp 0.17 (libupnpp5)

@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.63])
 
-AC_INIT([libupnpp-bindings], [0.17.0], [https://www.lesbonscomptes.com/upmpdcli])
+AC_INIT([libupnpp-bindings], [0.18.0], [https://www.lesbonscomptes.com/upmpdcli])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([1.11.2 -Wportability foreign])
