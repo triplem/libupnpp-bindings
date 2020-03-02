@@ -1,9 +1,9 @@
-# Set PYTHON_VERSION in the environment or command line to change the Python version.
-# e.g. ./configure PYTHON_VERSION=3
+# Set PYTHON_VERSION in the environment or command line to change the
+# Python version.  e.g. ./configure PYTHON_VERSION=3
 
 AC_PREREQ([2.63])
 
-AC_INIT([libupnpp-bindings], [0.18.0], [https://www.lesbonscomptes.com/upmpdcli])
+AC_INIT([libupnpp-bindings], [0.18.1],[https://www.lesbonscomptes.com/upmpdcli])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([1.11.2 -Wportability foreign])

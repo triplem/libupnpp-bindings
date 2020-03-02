@@ -2,8 +2,8 @@ Source: libupnpp-bindings
 Section: libs
 Priority: optional
 Maintainer: Jean-Francois Dockes <jf@dockes.org>
-Build-Depends: debhelper (>= 9), dh-python, python,
-               python-all-dev (>= 2.6.6-3~), python3, python3-all-dev,
+Build-Depends: debhelper (>= 9), dh-python,
+               python-all-dev (>= 2.6.6-3~), python3-all-dev,
                libupnpp6-dev (>= 0.18.0), autotools-dev
 X-Python-Version: >= 2.6
 Standards-Version: 3.9.8

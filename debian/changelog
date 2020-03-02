@@ -1,3 +1,9 @@
+libupnpp-bindings (0.18.1-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
+
+  * Version bump for re-generated python wrapper (fixes some c++ issues)
+
+ -- Jean-Francois Dockes <jf@dockes.org>  Wed, 02 Mar 2020 10:23:00 +1000
+
 libupnpp-bindings (0.18.0-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
 
   * No changes: just to go along with libupnpp 0.18 (libupnpp6)
