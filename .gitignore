@@ -19,7 +19,6 @@ missing
 python/_upnpp.la
 python/upnpp.py
 python/upnpp.pyc
-python/upnpp_wrap.cxx
 python/upnpp_wrap.lo
 python/upnpp/upnpp.py
 python/upnpp/upnpp.pyc
