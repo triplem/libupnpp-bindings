@@ -1,0 +1,15 @@
+[Unit]
+Description=Webcp HTTP UPnP Control Point service
+DefaultDependencies=no
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+Group=nogroup
+ExecStart=/tmp/webcp/webcp-run.py
+TimeoutStartSec=0
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
