@@ -470,7 +470,7 @@ retrieving/translating the result data.</p>
 <div class="paragraph">
 <p>At the moment, the implementation is more or less limited to setting and
 retrieving the OpenHome Volume, the initial purpose being to let upmpdcli
-control the audio volume through a Linn preamp instead of through MPD and
+control the audio volume through an UPnP preamp instead of through MPD and
 the DAC. upmpdcli has had an external volume control capability for a long
 time, this is just one possible implementation.</p>
 </div>
@@ -516,6 +516,19 @@ address and port if the default localhost:9090 is not appropriate.</p>
 <div class="paragraph">
 <p>Then use <code>systemctl enable webcp</code> and
 <code>systemctl start webcp</code> to enable and start.</p>
+</div>
+<div class="paragraph">
+<p>The WEB service has a main method to run an UPnP action, on '/'. This is
+accessed by the script described in the next section.</p>
+</div>
+<div class="paragraph">
+<p>It also has a <code>/devices</code> access which can be used to list the
+UDN/FriendlyNames pairs found on the network. Use it with something like:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>curl http://localhost:9090/devices</pre>
+</div>
 </div>
 </div>
 </div>
@@ -600,7 +613,7 @@ upmpdcli.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-05 10:13:49 +0100
+Last updated 2020-03-05 10:37:11 +0100
 </div>
 </div>
 </body>
