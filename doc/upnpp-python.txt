@@ -250,7 +250,7 @@ Dependencies:
 
 ++++
 <pre>
-git&nbsp;clone&nbsp;https://medoc@opensourceprojects.eu/git/p/libupnppbinding/code&nbsp;libupnpp-bindings
+git&nbsp;clone&nbsp;https://framagit.org/medoc92/libupnpp-bindings.git&nbsp;libupnpp-bindings
 cd libupnpp-bindings
 sh autogen.sh 
 configure --prefix=/usr
