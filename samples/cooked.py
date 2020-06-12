@@ -1,7 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 '''Using the discovery service and the avtransport classes instead of
 findTypedService(), and the string-based interface'''
-from __future__ import print_function
 
 import sys
 import time

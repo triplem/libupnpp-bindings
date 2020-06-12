@@ -1,15 +1,17 @@
-#!/usr/bin/env python
-from __future__ import print_function
+#!/usr/bin/python3
+#
+# Connect to a device/service and print all events.
+#
 
 import sys
 import time
 import upnpp
 
-def debug(x):
+def msg(x):
    print("%s" % x, file = sys.stderr)
 def usage():
-   debug(
-      "Usage: events.py <renderer> <service>\n" \
+   msg(
+      "Usage: events.py <device> <service>\n" \
       "Sample script: will sleep forever, printing events from the " \
       "specified \n    renderer and service\n"
       " renderer can be specified as a case-insensitive friendly name or "
@@ -27,10 +29,9 @@ fuzzyservicename = sys.argv[2]
 
 
 srv = upnpp.findTypedService(devname, fuzzyservicename, True)
-
 if not srv:
-   debug("findTypedService failed")
-   sys.exit(1)
+    msg("findTypedService failed")
+    sys.exit(1)
 
 
 # If the event reporter object holds a ref to the bridge class nobody
