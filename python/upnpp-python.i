@@ -39,7 +39,8 @@ public:
             //fprintf(stderr, "PythonReporter: bad callback object\n");
             return;
         }
-        m_service->installReporter(this);
+        if (m_service)
+            m_service->installReporter(this);
     }
     PythonReporter(const PythonReporter& o)
         : m_service(o.m_service), m_o(o.m_o) {
@@ -48,7 +49,8 @@ public:
     virtual ~PythonReporter() {
         //fprintf(stderr, "~PYTHONREPORTER\n");
         Py_XDECREF(m_o);
-        m_service->installReporter(0);
+        if (m_service)
+            m_service->installReporter(0);
     }
 
     virtual void changed(const char *nm, int val)  {
