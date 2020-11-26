@@ -25,6 +25,7 @@
  * cdircontent is needed because of the VarEventReporter method which takes
  * an UPnPDirObject value argument.
  */
+%include <libupnpp/upnppexports.hxx>
 %include <libupnpp/control/cdircontent.hxx>
 %include <libupnpp/control/service.hxx>
 
