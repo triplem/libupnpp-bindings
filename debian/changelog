@@ -1,3 +1,9 @@
+libupnpp-bindings (0.20.1-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
+
+  * Very small changes and version bump to follow libupnpp's. 
+
+ -- Jean-Francois Dockes <jf@dockes.org>  Thu, 26 Nov 2020 16:12:00 +0100
+
 libupnpp-bindings (0.19.2-1~ppaPPAVERS~SERIES1) SERIES; urgency=medium
 
   * A few bug fixes. Bump version to look like libupnpp's
