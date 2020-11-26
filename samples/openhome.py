@@ -2,15 +2,19 @@
 '''Exercising miscellanous OpenHome services and actions'''
 
 import sys
+import os
 import time
 import xml.etree.ElementTree as ET
 import upnpp
+from samplecommon import debug as debug
+from samplecommon import findservice as findservice
+from samplecommon import runsimpleaction as runaction
+from samplecommon import printevents as printevents
 
-def debug(x):
-   print("%s" % x, file = sys.stderr)
 def usage():
-   debug("Usage: getmedinfo.py devname")
-   sys.exit(1)
+    prog = os.path.basename(__file__)
+    debug("Usage: %s devname" % prog)
+    sys.exit(1)
    
 if len(sys.argv) != 2:
    usage()
@@ -19,23 +23,22 @@ devname = sys.argv[1]
 log = upnpp.Logger_getTheLog("stderr")
 log.setLogLevel(2)
 
-srv = upnpp.findTypedService(devname, "product", True)
-if not srv:
-   debug("'Product' service not found: device is not an openhome one")
-   sys.exit(1)
+srv = findservice(devname, "product")
 
-retdata = upnpp.runaction(srv, "Attributes", [])
-attributes = retdata["Value"]
-debug("Attributes: %s" % attributes)
+print("Exercising Product service:")
+runaction(srv, "Product", "ImageUri Info Name Room Url")
+runaction(srv, "Model", "ImageUri Info Name Url")
+runaction(srv, "Attributes", "Value")
+#retdata = upnpp.runaction(srv, "SetStandby", ["false"])
+#print("setstandby answer:[%s]" % retdata)
+runaction(srv, "SourceCount", "Value")
+data = runaction(srv, "SourceIndex", "Value")
+sourceindex = int(data["Value"])
+data = runaction(srv, "SourceXml", "Value")
+sourcexml = data["Value"]
+data = upnpp.runaction(srv, "SetStandby", ["false"])
+print("SetStandby return [%s]" % data)
 
-retdata = upnpp.runaction(srv, "SourceCount", [])
-sourcecount = int(retdata["Value"])
-retdata = upnpp.runaction(srv, "SourceIndex", [])
-sourceindex = int(retdata["Value"])
-
-retdata = upnpp.runaction(srv, "SourceXml", [])
-sourcexml = retdata["Value"]
-# print("source count %d, source XML: %s" % (sourcecount, sourcexml))
 xml = ET.XML(sourcexml)
 sources = []
 for child1 in xml:
@@ -59,12 +62,8 @@ print("Current source name %s, systemName %s type %s" % sources[sourceindex])
 
 sourcetype = sources[sourceindex][1]
 if sourcetype == "Playlist":
-   srv = upnpp.findTypedService(devname, "playlist", True)
-   if not srv:
-      debug("findTypedService failed for playlist service")
-      sys.exit(1)
-
-   retdata = upnpp.runaction(srv, "Id", [])
+   srv = findservice(devname, "playlist")
+   retdata = runaction(srv, "Id", "Value")
    if not retdata:
       sys.exit(1)
    id = retdata["Value"]
