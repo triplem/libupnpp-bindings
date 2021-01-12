@@ -22,10 +22,6 @@ devname = sys.argv[1]
 log = upnpp.Logger_getTheLog("stderr")
 log.setLogLevel(2)
 
-srv = findservice(devname, "Playlist")
-#runaction(srv, "Play", "")
-upnpp.runaction(srv, "SeekId", ["24"])
-
 srv = findservice(devname, "Info")
 
 for actname, expected in (
