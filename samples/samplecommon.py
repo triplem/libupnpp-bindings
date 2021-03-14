@@ -3,12 +3,15 @@ import sys
 import time
 
 def debug(x):
+    # print("%s" % x, file = sys.stderr)
+    pass
+def info(x):
     print("%s" % x, file = sys.stderr)
 
 def findservice(devname, servicename):
     srv = upnpp.findTypedService(devname, servicename, True)
     if not srv:
-        debug("'%s' service not found" % servicename)
+        info("'%s' service not found" % servicename)
         sys.exit(1)
     return srv
 
@@ -18,11 +21,11 @@ def runsimpleaction(srv, actname, expected):
     data = upnpp.runaction(srv, actname, [])
     for nm in elist:
         if not nm in data:
-            debug("Missing [%s] element in response" % nm)
+            info("Missing [%s] element in response" % nm)
             sys.exit(1)
     for nm, val in data.items():
-        print("%s -> %s" % (nm, val))
-    print("")
+        debug("%s -> %s" % (nm, val))
+    debug("")
     return data
 
 def printevents(srv):
