@@ -12676,6 +12676,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_VarEventReporter_autorenew_failed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  UPnPClient::VarEventReporter *arg1 = (UPnPClient::VarEventReporter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_UPnPClient__VarEventReporter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarEventReporter_autorenew_failed" "', argument " "1"" of type '" "UPnPClient::VarEventReporter *""'"); 
+  }
+  arg1 = reinterpret_cast< UPnPClient::VarEventReporter * >(argp1);
+  (arg1)->autorenew_failed();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *VarEventReporter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args, "swigregister", 1, 1, &obj)) return NULL;
@@ -12744,6 +12766,7 @@ SWIGINTERN PyObject *_wrap_Service_reSubscribe(PyObject *SWIGUNUSEDPARM(self), P
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
+  bool result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -12752,8 +12775,8 @@ SWIGINTERN PyObject *_wrap_Service_reSubscribe(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Service_reSubscribe" "', argument " "1"" of type '" "UPnPClient::Service *""'"); 
   }
   arg1 = reinterpret_cast< UPnPClient::Service * >(argp1);
-  (arg1)->reSubscribe();
-  resultobj = SWIG_Py_Void();
+  result = (bool)(arg1)->reSubscribe();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -16357,15 +16380,13 @@ SWIGINTERN PyObject *MapStringString_swiginit(PyObject *SWIGUNUSEDPARM(self), Py
   return SWIG_Python_InitShadowInstance(args);
 }
 
-SWIGINTERN PyObject *_wrap_Logger_getTheLog(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Logger_getTheLog__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
   int res1 = SWIG_OLDOBJ ;
-  PyObject *swig_obj[1] ;
   Logger *result = 0 ;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
     res1 = SWIG_AsPtr_std_string(swig_obj[0], &ptr);
@@ -16384,6 +16405,48 @@ SWIGINTERN PyObject *_wrap_Logger_getTheLog(PyObject *SWIGUNUSEDPARM(self), PyOb
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_getTheLog__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **SWIGUNUSEDPARM(swig_obj)) {
+  PyObject *resultobj = 0;
+  Logger *result = 0 ;
+  
+  if ((nobjs < 0) || (nobjs > 0)) SWIG_fail;
+  result = (Logger *)Logger::getTheLog();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Logger, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_getTheLog(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args, "Logger_getTheLog", 0, 1, argv))) SWIG_fail;
+  --argc;
+  if (argc == 0) {
+    return _wrap_Logger_getTheLog__SWIG_1(self, argc, argv);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Logger_getTheLog__SWIG_0(self, argc, argv);
+    }
+  }
+  
+fail:
+  SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'Logger_getTheLog'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Logger::getTheLog(std::string const &)\n"
+    "    Logger::getTheLog()\n");
+  return 0;
 }
 
 
@@ -16522,6 +16585,52 @@ SWIGINTERN PyObject *_wrap_Logger_getloglevel(PyObject *SWIGUNUSEDPARM(self), Py
   arg1 = reinterpret_cast< Logger * >(argp1);
   result = (int)((Logger const *)arg1)->getloglevel();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_getlogfilename(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Logger *arg1 = (Logger *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  std::string *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_getlogfilename" "', argument " "1"" of type '" "Logger const *""'"); 
+  }
+  arg1 = reinterpret_cast< Logger * >(argp1);
+  result = (std::string *) &((Logger const *)arg1)->getlogfilename();
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Logger_logisstderr(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Logger *arg1 = (Logger *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  bool result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_logisstderr" "', argument " "1"" of type '" "Logger const *""'"); 
+  }
+  arg1 = reinterpret_cast< Logger * >(argp1);
+  result = (bool)((Logger const *)arg1)->logisstderr();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -33343,6 +33452,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "UPnPDirContent_swiginit", UPnPDirContent_swiginit, METH_VARARGS, NULL},
 	 { "delete_VarEventReporter", _wrap_delete_VarEventReporter, METH_O, NULL},
 	 { "VarEventReporter_changed", _wrap_VarEventReporter_changed, METH_VARARGS, NULL},
+	 { "VarEventReporter_autorenew_failed", _wrap_VarEventReporter_autorenew_failed, METH_O, NULL},
 	 { "VarEventReporter_swigregister", VarEventReporter_swigregister, METH_O, NULL},
 	 { "delete_Service", _wrap_delete_Service, METH_O, NULL},
 	 { "Service_initFromDescription", _wrap_Service_initFromDescription, METH_VARARGS, NULL},
@@ -33434,12 +33544,14 @@ static PyMethodDef SwigMethods[] = {
 	 { "delete_MapStringString", _wrap_delete_MapStringString, METH_O, NULL},
 	 { "MapStringString_swigregister", MapStringString_swigregister, METH_O, NULL},
 	 { "MapStringString_swiginit", MapStringString_swiginit, METH_VARARGS, NULL},
-	 { "Logger_getTheLog", _wrap_Logger_getTheLog, METH_O, NULL},
+	 { "Logger_getTheLog", _wrap_Logger_getTheLog, METH_VARARGS, NULL},
 	 { "Logger_reopen", _wrap_Logger_reopen, METH_VARARGS, NULL},
 	 { "Logger_getstream", _wrap_Logger_getstream, METH_O, NULL},
 	 { "Logger_setLogLevel", _wrap_Logger_setLogLevel, METH_VARARGS, NULL},
 	 { "Logger_setloglevel", _wrap_Logger_setloglevel, METH_VARARGS, NULL},
 	 { "Logger_getloglevel", _wrap_Logger_getloglevel, METH_O, NULL},
+	 { "Logger_getlogfilename", _wrap_Logger_getlogfilename, METH_O, NULL},
+	 { "Logger_logisstderr", _wrap_Logger_logisstderr, METH_O, NULL},
 	 { "Logger_logthedate", _wrap_Logger_logthedate, METH_VARARGS, NULL},
 	 { "Logger_loggingdate", _wrap_Logger_loggingdate, METH_O, NULL},
 	 { "Logger_setdateformat", _wrap_Logger_setdateformat, METH_VARARGS, NULL},
