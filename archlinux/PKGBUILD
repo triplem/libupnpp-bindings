@@ -1,0 +1,23 @@
+# Maintainer: Markus M. May  <triplem@javafreedom.org> 
+pkgname=libupnpp-bindings
+pkgver=0.21.0
+pkgrel=1
+pkgdesc="A C++ wrapper for libupnp - used with upmpdcli or upplay - python bindings"
+url="https://www.lesbonscomptes.com//upmpdcli/libupnpp-refdoc/libupnpp-ctl.html"
+arch=(x86_64 i686 armv6h armv7h aarch64)
+license=(LGPL2.1)
+depends=(libupnpp python)
+source=("git+https://github.com/triplem/libupnpp-bindings.git")
+sha256sums=('SKIP')
+
+build(){
+  cd "${pkgname}"
+  ./autogen.sh
+  ./configure --prefix=/usr PYTHON_VERSION=3
+  make
+}
+
+package(){
+  cd "${pkgname}"
+  make DESTDIR="$pkgdir" install
+}
