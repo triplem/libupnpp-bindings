@@ -6,7 +6,7 @@ pkgdesc="A C++ wrapper for libupnp - used with upmpdcli or upplay - python bindi
 url="https://www.lesbonscomptes.com//upmpdcli/libupnpp-refdoc/libupnpp-ctl.html"
 arch=(x86_64 i686 armv6h armv7h aarch64)
 license=(LGPL2.1)
-depends=(libupnpp python)
+depends=(libupnpp python swig)
 source=("git+https://github.com/triplem/libupnpp-bindings.git")
 sha256sums=('SKIP')
 
